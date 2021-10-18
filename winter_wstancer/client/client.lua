@@ -31,19 +31,19 @@ Citizen.CreateThread(function()
 	local pIdVehicleClass = nil
 	while true do
 		pId = PlayerPedId()
-		Citizen.Wait(200)
-		if IsPedInAnyVehicle(pId, false) then
+		if IsPedInAnyVehicle(pId, false) and isPedDriving(pId) then
 			pIdVehicle = GetVehiclePedIsIn(pId, false)
 			pIdVehicleClass = GetVehicleClass(pIdVehicle)
 			if not blackListClass[pIdVehicleClass] and not tuning and not checked then
+				checked = true
 				width = {DecorGetFloat(pIdVehicle, "wheelLF"), DecorGetFloat(pIdVehicle, "wheelRF"), DecorGetFloat(pIdVehicle, "wheelLR"), DecorGetFloat(pIdVehicle, "wheelRR")}
 				Citizen.Wait(100)
 				updateWheels()
-				checked = true
 			end
 		else
 			checked = false
 		end
+		Citizen.Wait(200)
 	end
 end)
 
@@ -102,7 +102,7 @@ function updateWheels() -- If you dont constantly apply the properties, they res
 		pId = PlayerPedId()
 		pIdVehicle = GetVehiclePedIsIn(PlayerPedId(), false)
 		for k,v in pairs(width) do
-			print("width[k]", width[k])
+			--print("width[k]", width[k])
 			if width[k] ~= 0.0 then -- If width[k] == 0 then it has not been modified
 				SetVehicleWheelXOffset(pIdVehicle, k - 1, width[k]) 
 				count = count - 1 -- If the wheel is modified then substract
@@ -112,5 +112,13 @@ function updateWheels() -- If you dont constantly apply the properties, they res
 			break
 		end
 		Citizen.Wait(0)
+	end
+end
+
+function isPedDriving(pId)
+	if GetPedInVehicleSeat(GetVehiclePedIsIn(pId, false), -1) == pId then
+		return true
+	else
+		return false
 	end
 end
