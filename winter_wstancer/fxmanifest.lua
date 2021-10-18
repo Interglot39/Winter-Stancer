@@ -1,13 +1,8 @@
 fx_version 'bodacious'
 game 'gta5'
 
-ui_page 'html/index.html'
-
+author 'Interglot'
+description 'Wheel Distancer'
+version '1.0'
 
 client_scripts {'client/*.lua'}
-
-files {
-	'html/index.html',
-	'html/jquery.js',
-	'html/init.js',
-}
