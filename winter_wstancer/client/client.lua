@@ -7,6 +7,14 @@ local wheelBones = {
 	[2] = "wheel_lr",
 	[3] = "wheel_rr"
 }
+local blackListClass = {
+	[8]  = true,  -- Motorbikes
+	[13] = true, -- Cycles
+	[14] = true, -- Boats
+	[15] = true, -- Helis
+	[16] = true, -- Planes
+	[21] = true -- Trains LMAO
+}
 
 Citizen.CreateThread(function()
 	DecorRegister('wheelLF', 1)
@@ -14,6 +22,7 @@ Citizen.CreateThread(function()
 	DecorRegister('wheelLR', 1)
 	DecorRegister('wheelRR', 1)
 end)
+
 
 
 Citizen.CreateThread(function()
@@ -26,7 +35,7 @@ Citizen.CreateThread(function()
 		if IsPedInAnyVehicle(pId, false) then
 			pIdVehicle = GetVehiclePedIsIn(pId, false)
 			pIdVehicleClass = GetVehicleClass(pIdVehicle)
-			if pIdVehicleClass ~= 8 and pIdVehicleClass ~= 13 and pIdVehicleClass ~= 14 and pIdVehicleClass ~= 15 and pIdVehicleClass ~= 16 and pIdVehicleClass ~= 21 and not tuning and not checked then
+			if not blackListClass[pIdVehicleClass] and not tuning and not checked then
 				width = {DecorGetFloat(pIdVehicle, "wheelLF"), DecorGetFloat(pIdVehicle, "wheelRF"), DecorGetFloat(pIdVehicle, "wheelLR"), DecorGetFloat(pIdVehicle, "wheelRR")}
 				updateWheels()
 				checked = true
@@ -43,10 +52,10 @@ end, false)
 
 function modifyWheels()
 	local pIdVehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-	width = {GetVehicleWheelXOffset(pIdVehicle, 0), GetVehicleWheelXOffset(pIdVehicle, 1), GetVehicleWheelXOffset(pIdVehicle, 2), GetVehicleWheelXOffset(pIdVehicle, 3)}
 	local modified = false
 	local wheel = 0
 	local wheelPos = 0
+	width = {GetVehicleWheelXOffset(pIdVehicle, 0), GetVehicleWheelXOffset(pIdVehicle, 1), GetVehicleWheelXOffset(pIdVehicle, 2), GetVehicleWheelXOffset(pIdVehicle, 3)}
 	FreezeEntityPosition(pIdVehicle, true) -- Freeze vehicle at start so it does not reset wheels
 	while not IsControlJustReleased(0, 38) do  -- Until you do not press the desired key Check Config for more it does not stop
 		tuning = true
