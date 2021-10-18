@@ -94,18 +94,20 @@ end
 
 function updateWheels() -- If you dont constantly apply the properties, they reset to normal
 	local count = 4
-	local pIdVehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-	while IsPedInAnyVehicle(PlayerPedId(), false) do
+	local pId = PlayerPedId()
+	local pIdVehicle = GetVehiclePedIsIn(pId, false)
+	while IsPedInAnyVehicle(pId, false) do
 		count = 4
+		pId = PlayerPedId()
 		pIdVehicle = GetVehiclePedIsIn(PlayerPedId(), false)
 		for k,v in pairs(width) do
 			print("width[k]", width[k])
-			if width[k] ~= 0.0 then
-				SetVehicleWheelXOffset(pIdVehicle, k - 1, width[k])
-				count = count - 1
+			if width[k] ~= 0.0 then -- If width[k] == 0 then it has not been modified
+				SetVehicleWheelXOffset(pIdVehicle, k - 1, width[k]) 
+				count = count - 1 -- If the wheel is modified then substract
 			end
 		end
-		if count == 4 then
+		if count == 4 then-- If none of the wheels have been modified then stop updating
 			break
 		end
 		Citizen.Wait(0)
