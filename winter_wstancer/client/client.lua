@@ -37,6 +37,7 @@ Citizen.CreateThread(function()
 			pIdVehicleClass = GetVehicleClass(pIdVehicle)
 			if not blackListClass[pIdVehicleClass] and not tuning and not checked then
 				width = {DecorGetFloat(pIdVehicle, "wheelLF"), DecorGetFloat(pIdVehicle, "wheelRF"), DecorGetFloat(pIdVehicle, "wheelLR"), DecorGetFloat(pIdVehicle, "wheelRR")}
+				Citizen.Wait(100)
 				updateWheels()
 				checked = true
 			end
